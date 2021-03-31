@@ -41,9 +41,11 @@ def read_timeseries(filename, names=None, only_wells=None):
                      If None, the timeseries will not be filtered by well
                      (good for legacy data)
     """
-    assert isinstance(only_wells, list), 'only_wells must be a list'
-    assert all(isinstance(well, str) for well in only_wells), \
-        'only_wells must be a list'
+    if only_wells is not None:
+        err_str = 'only_wells must be a list of strings'
+        assert isinstance(only_wells, list), err_str
+        assert all(isinstance(well, str) for well in only_wells), err_str
+
     with pd.HDFStore(filename, 'r') as f:
         if only_wells is None:
             series = f['timeseries_data']
